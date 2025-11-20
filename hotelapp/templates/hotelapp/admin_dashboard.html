@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Management | Admin Dashboard</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* Animated gradient background */
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #0a0a0a, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+}
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating circles */
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(120px);
+    z-index: -1;
+}
+.circle1 { width: 350px; height: 350px; top: -50px; left: -50px; background: #00ffff; }
+.circle2 { width: 450px; height: 450px; bottom: -80px; right: -80px; background: #007bff; }
+
+/* Main card */
+.main-card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 20px;
+    padding: 3rem;
+    width: 1000px;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    border: 1px solid rgba(0,255,255,0.2);
+    transition: opacity 0.3s ease;
+}
+@keyframes cardGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Sub-card */
+.sub-card {
+    background: linear-gradient(135deg, #1b0000, #0f1c3f, #003030, #1f0040, #1b0000);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 390px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    border: 1px solid rgba(0,255,255,0.3);
+}
+
+/* Buttons */
+.glossy-btn {
+    width: 280px;
+    padding: 1.1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0,255,255,0.1);
+    border: 1px solid rgba(0,255,255,0.4);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px rgba(0,255,255,0.4), 0 0 20px rgba(0,123,255,0.3);
+    transition: all 0.3s ease;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+.glossy-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+.glossy-btn:hover::before {
+    opacity: 1;
+    transform: translateX(50%) rotate(45deg);
+}
+.glossy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0,255,255,0.6), 0 0 35px rgba(0,123,255,0.5), 0 0 50px rgba(0,255,255,0.4);
+}
+
+/* Header */
+.header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+}
+.logout-btn {
+    position: absolute;
+    right: 0;
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    color: #ff4c4c;
+    font-weight: 600;
+    padding: 0.8rem 1.4rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+}
+.logout-btn:hover {
+    background: rgba(255, 0, 0, 0.25);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    transform: scale(1.05);
+}
+
+/* Sub-card container */
+.sub-cards-container {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Popup */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+.popup-box {
+    background: linear-gradient(135deg, rgba(15,15,40,0.9), rgba(20,0,40,0.9));
+    border: 1px solid rgba(0,255,255,0.4);
+    box-shadow: 0 0 20px rgba(0,255,255,0.5);
+    padding: 2rem 3rem;
+    border-radius: 20px;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+}
+.popup-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+.popup-btn {
+    padding: 0.7rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+}
+.popup-confirm {
+    background: rgba(255,0,0,0.3);
+    border: 1px solid rgba(255,0,0,0.6);
+    color: #ff7777;
+}
+.popup-confirm:hover {
+    background: rgba(255,0,0,0.4);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255,0,0,0.5);
+}
+.popup-cancel {
+    background: rgba(0,255,255,0.15);
+    border: 1px solid rgba(0,255,255,0.4);
+    color: #00ffff;
+}
+.popup-cancel:hover {
+    background: rgba(0,255,255,0.25);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,255,255,0.4);
+}
+@keyframes fadeIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+</style>
+</head>
+<body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+<div id="mainCard" class="main-card">
+    <!-- Header with centered title -->
+    <div class="header">
+        <h2 class="heading">Admin Dashboard</h2>
+        <button onclick="showLogoutPopup()" class="logout-btn">🚪 Logout</button>
+    </div>
+
+    <div class="sub-cards-container">
+        <div class="sub-card">
+            <a href="{% url 'room_management' %}"><button class="glossy-btn">⚙️ Room Management</button></a>
+        </div>
+        <div class="sub-card">
+            <a href="{% url 'customer_management_admin' %}"><button class="glossy-btn">👥 Customer Management</button></a>
+        </div>
+    </div>
+</div>
+
+<!-- Popup -->
+<div id="logoutPopup" class="popup-overlay">
+  <div class="popup-box">
+    <h3 class="text-xl font-semibold text-white mb-2">Confirm Logout</h3>
+    <p class="text-gray-300">Are you sure you want to log out?</p>
+    <div class="popup-buttons">
+      <button onclick="logout()" class="popup-btn popup-confirm">Yes, Logout</button>
+      <button onclick="closePopup()" class="popup-btn popup-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showLogoutPopup() {
+    document.getElementById("logoutPopup").style.display = "flex";
+    document.getElementById("mainCard").style.opacity = "0.5";
+}
+function closePopup() {
+    document.getElementById("logoutPopup").style.display = "none";
+    document.getElementById("mainCard").style.opacity = "1";
+}
+function logout() {
+    window.location.href = "{% url 'index' %}";
+}
+</script>
+
+</body>
+</html>

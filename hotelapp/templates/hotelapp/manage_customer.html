@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Customers | Hotel Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* Animated background */
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+}
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Glowing circles */
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(120px);
+    z-index: -1;
+}
+.circle1 { width: 350px; height: 350px; top: -50px; left: -50px; background: #00ffff; }
+.circle2 { width: 450px; height: 450px; bottom: -80px; right: -80px; background: #007bff; }
+
+/* Success message box */
+.success-msg {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 255, 100, 0.1);
+    border: 1px solid rgba(0, 255, 100, 0.4);
+    color: #00ff99;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
+    text-align: center;
+    letter-spacing: 0.5px;
+    animation: fadeSlide 0.8s ease, pulse 2s infinite ease-in-out;
+    z-index: 9999;
+}
+
+/* Animated checkmark */
+.checkmark {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* Slide + fade animation */
+@keyframes fadeSlide {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Soft glowing pulse */
+@keyframes pulse {
+    0% { box-shadow: 0 0 10px rgba(0,255,100,0.4); }
+    50% { box-shadow: 0 0 25px rgba(0,255,100,0.7); }
+    100% { box-shadow: 0 0 10px rgba(0,255,100,0.4); }
+}
+
+/* Table container card */
+.main-card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 1000px;
+    color: #e0e0e0;
+    border: 1px solid rgba(0,255,255,0.2);
+    box-shadow: 0 0 20px rgba(0,255,255,0.15);
+}
+@keyframes cardGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Heading */
+.heading {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+thead {
+    background: rgba(0,255,255,0.15);
+}
+
+th, td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+th {
+    color: #00ffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+tr:hover {
+    background: rgba(0,255,255,0.08);
+    transition: 0.3s ease;
+}
+
+/* Buttons */
+.action-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid rgba(0,255,255,0.3);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.update-btn {
+    background: rgba(0,255,255,0.1);
+}
+.update-btn:hover {
+    background: rgba(0,255,255,0.3);
+    box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+/* No data text */
+.no-data {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.7);
+}
+</style>
+</head>
+<body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+{% if data %}
+<div class="success-msg" id="successMsg">
+    <span class="checkmark">✔</span>
+    {{ data }}
+</div>
+{% endif %}
+
+<div class="main-card">
+    <!-- Heading with Go Back button -->
+    <div style="position: relative; width: 100%; margin-bottom: 1.5rem;">
+        <h2 class="heading">Manage Customers</h2>
+        <a href="{% url 'recp_dashboard' %}" class="action-btn update-btn"
+           style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">
+           🔙 Go Back
+        </a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Rooms No</th>
+                <th colspan="1">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if customers %}
+                {% for cust in customers %}
+                <tr>
+                    <td>{{ cust.id }}</td>
+                    <td>{{ cust.name }}</td>
+                    <td>
+                        {% if cust.rooms %}
+                            {{ cust.rooms|join:", " }}
+                        {% else %}
+                            No rooms occupied yet
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'update_customer' cust.id %}" class="action-btn update-btn">✏️ Update</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" class="no-data">No customers found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+// Auto hide success message
+setTimeout(() => {
+    const msg = document.getElementById('successMsg');
+    if (msg) {
+        msg.style.transition = 'opacity 1s ease';
+        msg.style.opacity = '0';
+        setTimeout(() => msg.remove(), 1000);
+    }
+}, 4000);
+</script>
+</body>
+</html>

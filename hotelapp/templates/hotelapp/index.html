@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Selection | Hotel Management</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* Animated gradient background */
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #0a0a0a, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+}
+
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating circles */
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(120px);
+    z-index: -1;
+}
+.circle1 { width: 350px; height: 350px; top: -50px; left: -50px; background: #00ffff; }
+.circle2 { width: 450px; height: 450px; bottom: -80px; right: -80px; background: #007bff; }
+
+/* Card Glass with animated gradient */
+.card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 20px;
+    padding: 3rem;
+    width: 420px;
+    text-align: center;
+    color: #e0e0e0;
+    border: 1px solid rgba(0,255,255,0.2);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+@keyframes cardGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Card hover pop */
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 40px rgba(0,255,255,0.3), 0 5px 20px rgba(0,123,255,0.2);
+}
+
+/* Heading */
+.heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #ffffff;
+}
+
+/* Buttons */
+.glow-btn {
+    background: linear-gradient(135deg, #00ffff, #007bff);
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 10px #00ffff, 0 0 10px #007bff;
+    margin: 0.8rem 0;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.glow-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #00ffff, 0 0 25px #007bff;
+}
+
+/* Footer */
+.footer {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 1.5rem;
+}
+</style>
+</head>
+<body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+<div class="card">
+    <h2 class="heading">Select Login Type</h2>
+
+    <a href="{% url 'admin_login' %}"><button class="glow-btn">Admin Login</button></a>
+    <a href="{% url 'recp_dashboard' %}"><button class="glow-btn">Receptionist Login</button></a>
+
+</div>
+</body>
+</html>

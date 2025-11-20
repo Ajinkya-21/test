@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Bill | Hotel Management</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
+      font-family: 'Poppins', sans-serif;
+      color: #f8fafc;
+      min-height: 100vh;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      border-radius: 1rem;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+    }
+    .gradient-btn {
+      background: linear-gradient(90deg, #2563eb, #1d4ed8);
+      color: white;
+      transition: all 0.3s ease;
+    }
+    .gradient-btn:hover {
+      background: linear-gradient(90deg, #1d4ed8, #2563eb);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body class="p-8">
+
+  <div class="max-w-4xl mx-auto card p-8">
+    <h1 class="text-3xl font-semibold text-center mb-6 text-blue-400">
+      🧾 Customer Bill Summary
+    </h1>
+
+    <!-- Customer Info -->
+    <div class="bg-gray-800 p-5 rounded-lg mb-6">
+      <h2 class="text-xl font-semibold mb-3">Customer Details</h2>
+      <p><span class="font-semibold text-blue-300">Name:</span> {{ customer.name }}</p>
+      <p><span class="font-semibold text-blue-300">ID:</span> {{ customer.id }}</p>
+      <p><span class="font-semibold text-blue-300">Contact:</span> {{ customer.contact }}</p>
+      <p><span class="font-semibold text-blue-300">Address:</span> {{ customer.address }}</p>
+    </div>
+
+    <!-- Stay Details -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm text-left text-gray-300">
+        <thead class="text-gray-200 bg-gray-700">
+          <tr>
+            <th class="px-4 py-3">Room No</th>
+            <th class="px-4 py-3">Type</th>
+            <th class="px-4 py-3">Check-In</th>
+            <th class="px-4 py-3">Check-Out</th>
+            <th class="px-4 py-3">Days</th>
+            <th class="px-4 py-3">Rate (₹)</th>
+            <th class="px-4 py-3">Total (₹)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in all_stays %}
+          <tr class="border-b border-gray-700 hover:bg-gray-800">
+            <td class="px-4 py-3">{{ s.room.room_number }}</td>
+            <td class="px-4 py-3">{{ s.room.type }}</td>
+            <td class="px-4 py-3">{{ s.stay.check_in|date:"d M Y, h:i A" }}</td>
+            <td class="px-4 py-3">{{ s.stay.check_out|date:"d M Y, h:i A" }}</td>
+            <td class="px-4 py-3">{{ s.stay_days }}</td>
+            <td class="px-4 py-3">{{ s.rate_per_day }}</td>
+            <td class="px-4 py-3 font-semibold text-blue-300">{{ s.total_amount }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Grand Total -->
+    <div class="text-right mt-6">
+      <p class="text-xl font-semibold text-blue-400">
+        Grand Total: ₹{{ grand_total }}
+      </p>
+    </div>
+
+    <!-- Download Button -->
+    <form method="POST" class="text-center mt-8">
+      {% csrf_token %}
+      <button type="submit" name="download" class="gradient-btn px-6 py-3 rounded-lg text-lg font-semibold">
+        💾 Download Combined Bill (TXT)
+      </button>
+    </form>
+  </div>
+
+  {% if redirect_after_download %}
+  <script>
+    document.querySelector('form').addEventListener('submit', function() {
+      setTimeout(() => {
+        window.location.href = "{% url 'customer_management_admin' %}";
+      }, 2000);
+    });
+  </script>
+  {% endif %}
+</body>
+</html>

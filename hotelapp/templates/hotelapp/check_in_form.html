@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check In Form | Hotel Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+    overflow-x: hidden;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #0a0a0a, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+}
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.circle { position: fixed; border-radius: 50%; opacity: 0.1; filter: blur(120px); z-index: -1; }
+.circle1 { width: 350px; height: 350px; top: -50px; left: -50px; background: #00ffff; }
+.circle2 { width: 450px; height: 450px; bottom: -80px; right: -80px; background: #007bff; }
+
+.main-card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    width: 100%;
+    max-width: 540px;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 1px solid rgba(0,255,255,0.2);
+    box-sizing: border-box;
+}
+@keyframes cardGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.green-input {
+    border: 2px solid #00ff66;
+    box-shadow: 0 0 10px rgba(0,255,102,0.5);
+    background: rgba(0,255,102,0.05);
+    color: #00ff66;
+    text-align: center;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    height: 40px;
+    width: 60px;
+    line-height: 36px;
+    padding: 0;
+}
+.green-input:focus {
+    box-shadow: 0 0 15px rgba(0,255,102,0.8);
+    border-color: #00ff66;
+}
+
+/* Remove number input arrows */
+.green-input::-webkit-outer-spin-button,
+.green-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.green-input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+.glossy-btn {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0,255,255,0.1);
+    border: 1px solid rgba(0,255,255,0.4);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px rgba(0,255,255,0.4), 0 0 15px rgba(0,123,255,0.3);
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+.glossy-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+.glossy-btn:hover::before { 
+    opacity: 1; 
+    transform: translateX(50%) rotate(45deg); 
+}
+.glossy-btn:hover { 
+    transform: scale(1.05); 
+    box-shadow: 0 0 20px rgba(0,255,255,0.6), 0 0 30px rgba(0,123,255,0.5); 
+}
+
+.form-label { 
+    font-size: 1.2rem; 
+    font-weight: 600; 
+    color: #fff; 
+    margin-bottom: 0.5rem; 
+    text-align: center;
+}
+
+.heading { 
+    font-size: 1.8rem; 
+    font-weight: 700; 
+    color: #fff; 
+    margin-bottom: 1rem; 
+    text-align: center; 
+}
+
+.room-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0.8rem;
+}
+
+.counter-btn {
+    padding: 0.25rem 0.8rem;
+    margin: 0 0.3rem;
+    border-radius: 8px;
+    border: 2px solid #00ff66;
+    background: rgba(0,255,102,0.1);
+    color: #00ff66;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px rgba(0,255,102,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.counter-btn:hover {
+    background: rgba(0,255,102,0.2);
+    box-shadow: 0 0 15px rgba(0,255,102,0.8);
+    transform: scale(1.1);
+}
+
+.date-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+.date-row input { 
+    width: 100%; 
+    border-radius: 12px;
+    height: 40px;
+    font-weight: 500;
+    text-align: center;
+    color: #fff;
+    background: rgba(0,255,255,0.1);
+    border: 1px solid rgba(0,255,255,0.4);
+    box-shadow: 0 0 10px rgba(0,255,255,0.4), 0 0 15px rgba(0,123,255,0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+.date-row input::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+.date-row input:hover::before { 
+    opacity: 1; 
+    transform: translateX(50%) rotate(45deg); 
+}
+.date-row input:hover { 
+    transform: scale(1.02); 
+    box-shadow: 0 0 20px rgba(0,255,255,0.6), 0 0 30px rgba(0,123,255,0.5); 
+}
+.date-row input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+.date-row label { 
+    margin-bottom: 0.2rem; 
+    color: #fff;
+    font-weight: 500;
+}
+
+#customer-info {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+#customer-info p { margin: 0; font-weight: 500; }
+
+.glossy-btn { margin-top: 1.2rem; }
+
+hr {
+    margin: 0.5rem 0 1rem 0;
+    border-color: rgba(255,255,255,0.2);
+}
+
+.error-message {
+    color: #ff4444;
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+    text-align: center;
+    font-weight: 500;
+    display: none;
+}
+
+.error-border {
+    border-color: #ff4444 !important;
+    box-shadow: 0 0 10px rgba(255, 68, 68, 0.5) !important;
+}
+</style>
+</head>
+<body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+<div class="main-card">
+    <h2 class="heading">Check-In</h2>
+
+    <!-- Customer Info -->
+    <div id="customer-info">
+        <p><strong>ID:</strong> {{data.id}}</p>
+        <p><strong>Name:</strong> {{data.name}}</p>
+    </div>
+    <hr>
+
+    <form method="POST" action="{% url 'checked_in' data.id %}" id="checkin-form"> {% csrf_token %}
+        <h3 class="form-label">Assign Rooms</h3>
+
+        <!-- Room Rows -->
+        <div class="room-row">
+            <span style="font-weight: 500;">Single (Available: {{single}})</span>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="counter-btn" onclick="decrement('single')">-</button>
+                <input type="number" id="room_single" name="type" class="green-input" value="0" min="0" max='{{single}}' readonly>
+                <button type="button" class="counter-btn" onclick="increment('single', '{{single}}')">+</button>
+            </div>
+        </div>
+
+        <div class="room-row">
+            <span style="font-weight: 500;">Double (Available: {{double}})</span>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="counter-btn" onclick="decrement('double')">-</button>
+                <input type="number" id="room_double" name="type" class="green-input" value="0" min="0" max="{{double}}" readonly>
+                <button type="button" class="counter-btn" onclick="increment('double', '{{double}}')">+</button>
+            </div>
+        </div>
+
+        <div class="room-row">
+            <span style="font-weight: 500;">Deluxe (Available: {{deluxe}})</span>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="counter-btn" onclick="decrement('deluxe')">-</button>
+                <input type="number" id="room_deluxe" name="type" class="green-input" value="0" min="0" max="{{deluxe}}" readonly>
+                <button type="button" class="counter-btn" onclick="increment('deluxe', '{{deluxe}}')">+</button>
+            </div>
+        </div>
+
+        <div class="room-row">
+            <span style="font-weight: 500;">Suite (Available: {{suite}})</span>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="counter-btn" onclick="decrement('suite')">-</button>
+                <input type="number" id="room_suite" name="type" class="green-input" value="0" min="0" max="{{suite}}" readonly>
+                <button type="button" class="counter-btn" onclick="increment('suite', '{{suite}}')">+</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Dates -->
+        <div class="date-row">
+            <div style="display:flex; flex-direction:column; width:48%;">
+                <label>Check-In Date</label>
+                <input type="date" id="checkin_date" name="checkin_date" required>
+                <div id="checkin-error" class="error-message"></div>
+            </div>
+            <div style="display:flex; flex-direction:column; width:48%;">
+                <label>Check-Out Date</label>
+                <input type="date" id="checkout_date" name="checkout_date" required>
+                <div id="checkout-error" class="error-message"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="glossy-btn">Confirm Check-In</button>
+    </form>
+</div>
+
+<script>
+// Set minimum dates for inputs
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('checkin_date').setAttribute('min', today);
+
+// Calculate max date (1 month from today)
+const maxDate = new Date();
+maxDate.setMonth(maxDate.getMonth() + 1);
+const maxDateStr = maxDate.toISOString().split('T')[0];
+document.getElementById('checkout_date').setAttribute('max', maxDateStr);
+
+function increment(id, max) {
+    let input = document.getElementById('room_' + id);
+    if (parseInt(input.value) < max) input.value = parseInt(input.value) + 1;
+}
+
+function decrement(id) {
+    let input = document.getElementById('room_' + id);
+    if (parseInt(input.value) > 0) input.value = parseInt(input.value) - 1;
+}
+
+// Form validation
+document.getElementById('checkin-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const checkinDate = document.getElementById('checkin_date').value;
+    const checkoutDate = document.getElementById('checkout_date').value;
+    const checkinError = document.getElementById('checkin-error');
+    const checkoutError = document.getElementById('checkout-error');
+    
+    // Reset errors
+    checkinError.style.display = 'none';
+    checkoutError.style.display = 'none';
+    document.getElementById('checkin_date').classList.remove('error-border');
+    document.getElementById('checkout_date').classList.remove('error-border');
+    
+    let isValid = true;
+    
+    // Validate check-in date
+    if (!checkinDate) {
+        checkinError.textContent = 'Check-in date is required';
+        checkinError.style.display = 'block';
+        document.getElementById('checkin_date').classList.add('error-border');
+        isValid = false;
+    } else if (new Date(checkinDate) < new Date(today)) {
+        checkinError.textContent = 'Check-in date cannot be in the past';
+        checkinError.style.display = 'block';
+        document.getElementById('checkin_date').classList.add('error-border');
+        isValid = false;
+    }
+    
+    // Validate check-out date
+    if (!checkoutDate) {
+        checkoutError.textContent = 'Check-out date is required';
+        checkoutError.style.display = 'block';
+        document.getElementById('checkout_date').classList.add('error-border');
+        isValid = false;
+    } else if (new Date(checkoutDate) <= new Date(checkinDate)) {
+        checkoutError.textContent = 'Check-out date must be after check-in date';
+        checkoutError.style.display = 'block';
+        document.getElementById('checkout_date').classList.add('error-border');
+        isValid = false;
+    } else if (new Date(checkoutDate) > new Date(maxDateStr)) {
+        checkoutError.textContent = 'Check-out date cannot be more than 1 month from today';
+        checkoutError.style.display = 'block';
+        document.getElementById('checkout_date').classList.add('error-border');
+        isValid = false;
+    }
+    if (isValid) {
+        this.submit();  // <-- actually submit the form
+    }
+});
+
+// Real-time validation when dates change
+document.getElementById('checkin_date').addEventListener('change', function() {
+    const checkinDate = this.value;
+    const checkoutDate = document.getElementById('checkout_date').value;
+    const checkinError = document.getElementById('checkin-error');
+    
+    if (checkinDate && new Date(checkinDate) < new Date(today)) {
+        checkinError.textContent = 'Check-in date cannot be in the past';
+        checkinError.style.display = 'block';
+        this.classList.add('error-border');
+    } else {
+        checkinError.style.display = 'none';
+        this.classList.remove('error-border');
+        
+        // Update checkout min date
+        if (checkinDate) {
+            document.getElementById('checkout_date').setAttribute('min', checkinDate);
+        }
+    }
+});
+
+document.getElementById('checkout_date').addEventListener('change', function() {
+    const checkoutDate = this.value;
+    const checkinDate = document.getElementById('checkin_date').value;
+    const checkoutError = document.getElementById('checkout-error');
+    
+    if (checkoutDate && checkinDate && new Date(checkoutDate) <= new Date(checkinDate)) {
+        checkoutError.textContent = 'Check-out date must be after check-in date';
+        checkoutError.style.display = 'block';
+        this.classList.add('error-border');
+    } else if (checkoutDate && new Date(checkoutDate) > new Date(maxDateStr)) {
+        checkoutError.textContent = 'Check-out date cannot be more than 1 month from today';
+        checkoutError.style.display = 'block';
+        this.classList.add('error-border');
+    } else {
+        checkoutError.style.display = 'none';
+        this.classList.remove('error-border');
+    }
+});
+</script>
+</body>
+</html>

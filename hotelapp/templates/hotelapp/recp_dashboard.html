@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Management | Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 2rem;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #0a0a0a, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+    color: #e0e0e0;
+    overflow-y: auto;
+}
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Floating decorative circles */
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(120px);
+    z-index: -1;
+}
+.circle1 { width: 350px; height: 350px; top: -50px; left: -50px; background: #00ffff; }
+.circle2 { width: 450px; height: 450px; bottom: -80px; right: -80px; background: #007bff; }
+
+/* Main card */
+.main-card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    border: 1px solid rgba(0,255,255,0.2);
+}
+@keyframes cardGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.heading {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    color: #fff;
+    margin: 0;
+}
+
+/* Sub-cards container */
+.sub-cards-container {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Sub-card boxes */
+.sub-card {
+    background: linear-gradient(135deg, #1b0000, #0f1c3f, #003030, #1f0040, #1b0000);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 16px;
+    padding: 2rem;
+    width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    border: 1px solid rgba(0,255,255,0.3);
+}
+
+/* Buttons */
+.glossy-btn {
+    width: 300px;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0,255,255,0.1);
+    border: 1px solid rgba(0,255,255,0.4);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px rgba(0,255,255,0.4), 0 0 20px rgba(0,123,255,0.3);
+    transition: all 0.3s ease;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+}
+.glossy-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255,255,255,0.2);
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+.glossy-btn:hover::before {
+    opacity: 1;
+    transform: translateX(50%) rotate(45deg);
+}
+.glossy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0,255,255,0.6), 0 0 35px rgba(0,123,255,0.5), 0 0 50px rgba(0,255,255,0.4);
+}
+
+/* Search input */
+.search-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+.search-btn {
+    width: 100%;
+    height: 55px;
+    padding: 0 2.5rem 0 1rem;
+    border-radius: 12px;
+    border: 2px solid #00ff99;
+    background: rgba(0,255,100,0.05);
+    color: #00ff99;
+    font-weight: 500;
+    font-size: 1rem;
+    outline: none;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px rgba(0,255,100,0.3);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.search-btn:hover,
+.search-btn:focus {
+    box-shadow: 0 0 15px rgba(0,255,100,0.7), 0 0 25px rgba(0,123,255,0.5);
+    border-color: #00ff99;
+}
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #00ff99;
+    font-size: 1.2rem;
+    pointer-events: none;
+}
+
+/* Success message */
+.success-msg {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 255, 100, 0.1);
+    border: 1px solid rgba(0, 255, 100, 0.4);
+    color: #00ff99;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
+    text-align: center;
+    letter-spacing: 0.5px;
+    z-index: 9999;
+}
+.checkmark {
+    font-size: 1.5rem;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+</style>
+</head>
+<body>
+
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+{% if msg %}
+<div class="success-msg" id="successMsg">
+    <span class="checkmark">✔</span>
+    {{ msg }}
+</div>
+{% endif %}
+
+<div class="main-card">
+
+    <!-- Go Back Button -->
+    <div style="position: relative; width: 100%; margin-bottom: 1rem;">
+        <h2 class="heading">Receptionist Dashboard</h2>
+        <a href="{% url 'index' %}" class="glossy-btn"
+           style="position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: auto; padding: 0.5rem 1rem;">
+           🚪Logout
+        </a>
+    </div>
+
+    <div class="search-container">
+        <a href="{% url 'search_customer_recp' %}">
+            <button class="search-btn">
+                🔍 Search Customer
+            </button>
+        </a>
+    </div>
+
+    <!-- Sub-cards container -->
+    <div class="sub-cards-container">
+        <div class="sub-card">
+            <a href="{% url 'check_cust_id' %}"><button class="glossy-btn">Check In</button></a>
+            <a href="{% url 'check_cust_id_out' %}"><button class="glossy-btn">Check Out</button></a>
+        </div>
+        <div class="sub-card">
+            <a href="{% url 'add_customer' %}"><button class="glossy-btn">➕  Add Customer</button></a>
+            <a href="{% url 'manage_customer' %}"><button class="glossy-btn">✏️  Manage Customer</button></a>
+        </div>
+    </div>
+</div>
+
+<script>
+setTimeout(() => {
+    const msg = document.getElementById('successMsg');
+    if (msg) {
+        msg.style.transition = 'opacity 1s ease';
+        msg.style.opacity = '0';
+        setTimeout(() => msg.remove(), 1000);
+    }
+}, 3000);
+</script>
+</body>
+</html>

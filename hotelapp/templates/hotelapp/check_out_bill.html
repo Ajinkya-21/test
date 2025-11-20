@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Checkout Bill | Hotel Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 2rem 0;
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+    color: #e0e0e0;
+    overflow-y: auto; /* allow full page scrolling */
+}
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.main-card {
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(0,255,255,0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 0 25px rgba(0,255,255,0.15);
+}
+
+/* Custom scrollbar for the full page */
+body::-webkit-scrollbar {
+    width: 10px;
+}
+body::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.02);
+    border-radius: 8px;
+}
+body::-webkit-scrollbar-thumb {
+    background: rgba(0,255,255,0.18);
+    border-radius: 8px;
+    border: 2px solid rgba(0,0,0,0.12);
+}
+body::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,255,255,0.28);
+}
+
+/* Firefox scrollbar */
+body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,255,255,0.18) rgba(255,255,255,0.02);
+}
+
+.heading {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #00ffff;
+    margin-bottom: 1.5rem;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+th, td {
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-align: left;
+}
+th {
+    color: #00ffff;
+}
+.download-btn {
+    display: block;
+    width: 100%;
+    background: rgba(0,255,255,0.15);
+    color: #00ffff;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 10px;
+    text-align: center;
+    transition: 0.3s ease;
+    border: 1px solid rgba(0,255,255,0.4);
+}
+.download-btn:hover {
+    background: rgba(0,255,255,0.4);
+    color: #fff;
+    box-shadow: 0 0 20px rgba(0,255,255,0.5);
+}
+</style>
+</head>
+<body>
+<div class="main-card">
+    <h2 class="heading">Customer Bill Summary</h2>
+
+    <table>
+        <tr><td><strong>Name:</strong></td><td>{{ customer.name }}</td></tr>
+        <tr><td><strong>ID:</strong></td><td>{{ customer.id }}</td></tr>
+        <tr><td><strong>Contact:</strong></td><td>{{ customer.contact }}</td></tr>
+        <tr><td><strong>Address:</strong></td><td>{{ customer.address }}</td></tr>
+    </table>
+
+    <h3 class="text-cyan-400 text-lg font-semibold mb-2">Room Details</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Room No</th>
+                <th>Type</th>
+                <th>Check-In</th>
+                <th>Check-Out</th>
+                <th>Days</th>
+                <th>Rate</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in all_stays %}
+            <tr>
+                <td>{{ s.room.room_number }}</td>
+                <td>{{ s.room.type }}</td>
+                <td>{{ s.stay.check_in }}</td>
+                <td>{{ s.stay.check_out }}</td>
+                <td>{{ s.stay_days }}</td>
+                <td>₹{{ s.rate_per_day }}</td>
+                <td><strong>₹{{ s.total_amount }}</strong></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="text-right text-lg font-semibold text-cyan-300">
+        Grand Total: ₹{{ grand_total }}
+    </p>
+
+    <form method="POST" style="margin-top:16px;">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ customer.id }}">
+        <button type="submit" name="download" class="download-btn">
+            💾 Download Combined Bill (TXT)
+        </button>
+    </form>
+    {% if redirect_after_download %}
+<script>
+document.querySelector('form').addEventListener('submit', function() {
+    // Wait 2 seconds for download to start, then redirect
+    setTimeout(() => {
+        window.location.href = "{% url 'recp_dashboard' %}";
+    }, 2000);
+});
+</script>
+{% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check In | Hotel Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* Theme styling (same as before) */
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #0a0a0a, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+}
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(120px);
+    z-index: -1;
+}
+.circle1 { width: 350px; height: 350px; top: -50px; left: -50px; background: #00ffff; }
+.circle2 { width: 450px; height: 450px; bottom: -80px; right: -80px; background: #007bff; }
+.main-card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 20px;
+    padding: 3rem;
+    width: 700px;
+    color: #e0e0e0;
+    border: 1px solid rgba(0,255,255,0.2);
+    text-align: center;
+}
+@keyframes cardGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.glossy-btn {
+    width: 200px;
+    padding: 0.9rem;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(0,255,255,0.1);
+    border: 1px solid rgba(0,255,255,0.4);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-align: center;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 10px rgba(0,255,255,0.4), 0 0 20px rgba(0,123,255,0.3);
+}
+.glossy-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0,255,255,0.6), 0 0 35px rgba(0,123,255,0.5), 0 0 50px rgba(0,255,255,0.4);
+}
+input {
+    background: rgba(0,255,100,0.05);
+    border: 2px solid #00ff99;
+    color: #00ff99;
+    font-weight: 500;
+    border-radius: 12px;
+    padding: 0.7rem 1rem;
+    width: 80%;
+    outline: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 10px rgba(0,255,100,0.3);
+}
+input:hover,
+input:focus {
+    box-shadow: 0 0 15px rgba(0,255,100,0.7), 0 0 25px rgba(0,123,255,0.5);
+    border-color: #00ff99;
+}
+
+.goback-btn {
+    position: absolute;
+    top: 25px;
+    left: 30px;
+    background: rgba(0,255,255,0.1);
+    color: #00ffff;
+    border: 1px solid rgba(0,255,255,0.5);
+    border-radius: 10px;
+    padding: 8px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+.goback-btn:hover {
+    background: rgba(0,255,255,0.2);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0,255,255,0.6);
+}
+</style>
+</head>
+
+<body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+<a href="{% url 'recp_dashboard' %}" class="goback-btn">⬅ Go Back</a>
+
+<div class="main-card">
+    <h2 class="text-2xl font-bold mb-4 text-white">Customer Check-In</h2>
+
+    <!-- Step 1: Check Customer ID -->
+    <form method="POST" action="{% url 'check_cust_id_out' %}">
+        {% csrf_token %}
+        <input type="text" name="id" placeholder="Enter Customer ID" style="height: 40px;" required>
+        <br><br>
+        <button type="submit" class="glossy-btn">Submit</button>
+    </form>
+
+    {% if error %}
+        <p class="text-red-500 mt-3">{{ error }}</p>
+    {% endif %}
+</div>
+</body>
+</html>

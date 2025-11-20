@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Management | Hotel Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* Background Animation */
+body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 800% 800%;
+    animation: bgGradient 25s ease infinite;
+}
+@keyframes bgGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Glowing circles */
+.circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    filter: blur(120px);
+    z-index: -1;
+}
+.circle1 { width: 350px; height: 350px; top: -50px; left: -50px; background: #00ffff; }
+.circle2 { width: 450px; height: 450px; bottom: -80px; right: -80px; background: #007bff; }
+
+/* Main card */
+.main-card {
+    position: relative;
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, #0a0a0a, #0f1c3f, #1b0000, #1f0040, #003030);
+    background-size: 400% 400%;
+    animation: cardGradient 20s ease infinite;
+    border-radius: 20px;
+    padding: 2.5rem;
+    width: 95%;
+    max-width: 1100px;
+    color: #e0e0e0;
+    border: 1px solid rgba(0,255,255,0.3);
+    box-shadow: 0 0 25px rgba(0,255,255,0.2);
+}
+@keyframes cardGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Header */
+.header {
+    position: relative;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+}
+.go-back-btn {
+    position: absolute;
+    right: 0;
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid rgba(255, 0, 0, 0.4);
+    color: #ff4c4c;
+    font-weight: 600;
+    padding: 0.8rem 1.4rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+    text-decoration: none;
+}
+.go-back-btn:hover {
+    background: rgba(255, 0, 0, 0.25);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    transform: scale(1.05);
+}
+
+/* Table container */
+.table-container {
+    max-height: 380px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #00ffff #0a0a0a;
+}
+.table-container::-webkit-scrollbar {
+    width: 8px;
+}
+.table-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+.table-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 255, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.9);
+    box-shadow: 0 0 20px rgba(0,255,255,0.9);
+}
+
+/* Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+thead {
+    background: rgba(0,255,255,0.15);
+}
+th, td {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+th {
+    color: #00ffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+tr:hover {
+    background: rgba(0,255,255,0.08);
+    transition: 0.3s ease;
+}
+
+/* Action buttons */
+.action-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    border: 1px solid rgba(0,255,255,0.3);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.delete-btn {
+    background: rgba(255,0,0,0.1);
+    border-color: rgba(255,0,0,0.3);
+}
+.delete-btn:hover {
+    background: rgba(255,0,0,0.3);
+    box-shadow: 0 0 10px rgba(255,0,0,0.5);
+}
+.bill-btn {
+    background: rgba(0,255,255,0.1);
+}
+.bill-btn:hover {
+    background: rgba(0,255,255,0.3);
+    box-shadow: 0 0 10px rgba(0,255,255,0.5);
+}
+
+.no-data {
+    text-align: center;
+    padding: 2rem;
+    color: rgba(255,255,255,0.6);
+    font-size: 1.1rem;
+}
+</style>
+</head>
+<body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+
+<div class="main-card">
+    <div class="header">
+        <a href="{% url 'admin_dashboard' %}" class="go-back-btn">⬅ Go Back</a>
+        <h2 class="heading">Customer Management</h2>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer ID</th>
+                    <th>Name</th>
+                    <th>Room No</th>
+                    <th>Check-In</th>
+                    <th>Check-Out</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cust in customer %}
+                <tr>
+                    <td>{{ cust.id }}</td>
+                    <td>{{ cust.name }}</td>
+                    <td>
+                        {% for r in room %}
+                            {% if r.cust_id == cust.id %}
+                                {{ r.room_number }}{% if not forloop.last %}, {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for r in room %}
+                            {% if r.cust_id == cust.id and forloop.first %}
+                                {{ r.check_in }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for r in room %}
+                            {% if r.cust_id == cust.id and forloop.first %}
+                                {{ r.check_out }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_customer' cust.id %}" class="action-btn delete-btn">🗑️ Delete</a>
+                        <a href="{% url 'generate_bill' cust.id %}" class="action-btn bill-btn">💵 Bill</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="no-data">No customers found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
